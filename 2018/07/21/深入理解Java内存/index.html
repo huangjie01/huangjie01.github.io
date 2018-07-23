@@ -79,19 +79,19 @@
 
 
 
-<meta name="description" content="前言 Java开发中，我们不需要像在进行C/C++开发那样，需要自己去写delete/free来释放申请的内存，在Java中内存是交给虚拟机管理，凡事都是两面的，因为我们把内存控制权交给了Java虚拟机，一旦出现了内存泄漏和溢出问题，如果我们不了解虚拟机时怎么使用的内存，那么排查问题将会非常困难。  运行时的数据区域   Java虚拟机在执行Java程序的过程中会把它管理的内存划分为若干个不同的数">
+<meta name="description" content="前言 Java开发中，我们不需要像在进行C/C++开发那样，需要自己去写delete/free来释放申请的内存，在Java中内存是交给虚拟机管理，凡事都是两面的，因为我们把内存控制权交给了Java虚拟机，一旦出现了内存泄漏和溢出问题，如果我们不了解虚拟机时怎么使用的内存，那么排查问题将会非常困难。">
 <meta name="keywords" content="java">
 <meta property="og:type" content="article">
 <meta property="og:title" content="深入理解Java内存">
 <meta property="og:url" content="http://yoursite.com/2018/07/21/深入理解Java内存/index.html">
 <meta property="og:site_name" content="黄杰的博客">
-<meta property="og:description" content="前言 Java开发中，我们不需要像在进行C/C++开发那样，需要自己去写delete/free来释放申请的内存，在Java中内存是交给虚拟机管理，凡事都是两面的，因为我们把内存控制权交给了Java虚拟机，一旦出现了内存泄漏和溢出问题，如果我们不了解虚拟机时怎么使用的内存，那么排查问题将会非常困难。  运行时的数据区域   Java虚拟机在执行Java程序的过程中会把它管理的内存划分为若干个不同的数">
+<meta property="og:description" content="前言 Java开发中，我们不需要像在进行C/C++开发那样，需要自己去写delete/free来释放申请的内存，在Java中内存是交给虚拟机管理，凡事都是两面的，因为我们把内存控制权交给了Java虚拟机，一旦出现了内存泄漏和溢出问题，如果我们不了解虚拟机时怎么使用的内存，那么排查问题将会非常困难。">
 <meta property="og:locale" content="default">
 <meta property="og:image" content="http://yoursite.com/2018/07/21/深入理解Java内存/heap.png">
-<meta property="og:updated_time" content="2018-07-21T15:53:22.104Z">
+<meta property="og:updated_time" content="2018-07-23T06:11:22.647Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="深入理解Java内存">
-<meta name="twitter:description" content="前言 Java开发中，我们不需要像在进行C/C++开发那样，需要自己去写delete/free来释放申请的内存，在Java中内存是交给虚拟机管理，凡事都是两面的，因为我们把内存控制权交给了Java虚拟机，一旦出现了内存泄漏和溢出问题，如果我们不了解虚拟机时怎么使用的内存，那么排查问题将会非常困难。  运行时的数据区域   Java虚拟机在执行Java程序的过程中会把它管理的内存划分为若干个不同的数">
+<meta name="twitter:description" content="前言 Java开发中，我们不需要像在进行C/C++开发那样，需要自己去写delete/free来释放申请的内存，在Java中内存是交给虚拟机管理，凡事都是两面的，因为我们把内存控制权交给了Java虚拟机，一旦出现了内存泄漏和溢出问题，如果我们不了解虚拟机时怎么使用的内存，那么排查问题将会非常困难。">
 <meta name="twitter:image" content="http://yoursite.com/2018/07/21/深入理解Java内存/heap.png">
 
 
@@ -333,14 +333,16 @@
 
       
         <h3 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h3><ol>
-<li>Java开发中，我们不需要像在进行C/C++开发那样，需要自己去写delete/free来释放申请的内存，在Java中内存是交给虚拟机管理，凡事都是两面的，因为我们把内存控制权交给了Java虚拟机，一旦出现了内存泄漏和溢出问题，如果我们不了解虚拟机时怎么使用的内存，那么排查问题将会非常困难。</li>
-</ol>
-<h3 id="运行时的数据区域"><a href="#运行时的数据区域" class="headerlink" title="运行时的数据区域"></a>运行时的数据区域</h3><p>   Java虚拟机在执行Java程序的过程中会把它管理的内存划分为若干个不同的数据区域，这些区域都有各自的用途，以及销毁的时间，有的区域随着虚拟机进程的启动而存在，有些区域则依赖用户线程的启动和结束而建立和销毁。</p>
-<p>   <img src="/2018/07/21/深入理解Java内存/heap.png" alt="内存区域"></p>
+<li><p>Java开发中，我们不需要像在进行C/C++开发那样，需要自己去写delete/free来释放申请的内存，在Java中内存是交给虚拟机管理，凡事都是两面的，因为我们把内存控制权交给了Java虚拟机，一旦出现了内存泄漏和溢出问题，如果我们不了解虚拟机时怎么使用的内存，那么排查问题将会非常困难。</p>
+<a id="more"></a> 
+<h3 id="运行时的数据区域"><a href="#运行时的数据区域" class="headerlink" title="运行时的数据区域"></a>运行时的数据区域</h3><p>Java虚拟机在执行Java程序的过程中会把它管理的内存划分为若干个不同的数据区域，这些区域都有各自的用途，以及销毁的时间，有的区域随着虚拟机进程的启动而存在，有些区域则依赖用户线程的启动和结束而建立和销毁。</p>
+<p><img src="/2018/07/21/深入理解Java内存/heap.png" alt="内存区域"></p>
 <h3 id="Java堆"><a href="#Java堆" class="headerlink" title="Java堆"></a>Java堆</h3><ol>
 <li>Java堆是被所有的线程共享的内存区域，在虚拟机启动的时候创建，此内存区域唯一的目的是存放对象实例，几乎所有的对象都在这里分配内存。Java虚拟机规范中描述的是所有的对象实例以及数组都在堆上分配。</li>
 <li>Java堆是垃圾管理器主要管理的区域，</li>
 <li>根据Java虚拟机规范中规定，Java堆可以处在物理上不连续的内存区域，只要逻辑上是连续的就可以。就像我们的磁盘一样，在实现的时候既可以实现成固定大小的，也可以是可扩展的。如果在堆中没有内存用于实例分配，且堆也没有办法扩展时，将会抛出OutOfMemoryError异常。</li>
+</ol>
+</li>
 </ol>
 <h3 id="Java中的方法区"><a href="#Java中的方法区" class="headerlink" title="Java中的方法区"></a>Java中的方法区</h3><ol>
 <li><p>方法区与堆一样，是各个线程共享的内存区域，它用于存储已被虚拟机加载的类信息，常量，静态变量，即时编译器编译后的代码等数据，虽然Java虚拟机规范把方法区描述为堆的一个逻辑部分，但是它却有一个别名叫做Non-Heap(非堆)。目的是把它与Java堆分开来。</p>
