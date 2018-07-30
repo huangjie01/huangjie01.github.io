@@ -79,18 +79,18 @@
 
 
 
-<meta name="description" content="前言 &amp;emsp;&amp;emsp;Handler在Android开发中经常使用，比我我们在子线程中完成从服务端获取数据，因为Android系统是不允许我们在非主线程中去访问UI，这个时候我们需要用Handler把更新UI的操作切换到主线程中去操作。这里有一个误区就是很多开发者以为Handler只能用于访问UI，这是错误的，因为更新UI这是Handler的一种特殊的使用场景。其实Handler是用于进">
+<meta name="description" content="前言 &amp;emsp;&amp;emsp;Handler在Android开发中经常使用，比我我们在子线程中完成从服务端获取数据，因为Android系统是不允许我们在非主线程中去访问UI，这个时候我们需要用Handler把更新UI的操作切换到主线程中去操作。这里有一个误区就是很多开发者以为Handler只能用于访问UI，这是错误的，因为更新UI这是Handler的一种特殊的使用场景。其实Handler是用于进行">
 <meta name="keywords" content="Android">
 <meta property="og:type" content="article">
 <meta property="og:title" content="深入理解Andorid消息机制">
 <meta property="og:url" content="http://yoursite.com/2018/07/22/深入理解Andorid消息机制/index.html">
 <meta property="og:site_name" content="黄杰的博客">
-<meta property="og:description" content="前言 &amp;emsp;&amp;emsp;Handler在Android开发中经常使用，比我我们在子线程中完成从服务端获取数据，因为Android系统是不允许我们在非主线程中去访问UI，这个时候我们需要用Handler把更新UI的操作切换到主线程中去操作。这里有一个误区就是很多开发者以为Handler只能用于访问UI，这是错误的，因为更新UI这是Handler的一种特殊的使用场景。其实Handler是用于进">
+<meta property="og:description" content="前言 &amp;emsp;&amp;emsp;Handler在Android开发中经常使用，比我我们在子线程中完成从服务端获取数据，因为Android系统是不允许我们在非主线程中去访问UI，这个时候我们需要用Handler把更新UI的操作切换到主线程中去操作。这里有一个误区就是很多开发者以为Handler只能用于访问UI，这是错误的，因为更新UI这是Handler的一种特殊的使用场景。其实Handler是用于进行">
 <meta property="og:locale" content="default">
-<meta property="og:updated_time" content="2018-07-23T11:52:49.298Z">
+<meta property="og:updated_time" content="2018-07-30T03:53:27.711Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="深入理解Andorid消息机制">
-<meta name="twitter:description" content="前言 &amp;emsp;&amp;emsp;Handler在Android开发中经常使用，比我我们在子线程中完成从服务端获取数据，因为Android系统是不允许我们在非主线程中去访问UI，这个时候我们需要用Handler把更新UI的操作切换到主线程中去操作。这里有一个误区就是很多开发者以为Handler只能用于访问UI，这是错误的，因为更新UI这是Handler的一种特殊的使用场景。其实Handler是用于进">
+<meta name="twitter:description" content="前言 &amp;emsp;&amp;emsp;Handler在Android开发中经常使用，比我我们在子线程中完成从服务端获取数据，因为Android系统是不允许我们在非主线程中去访问UI，这个时候我们需要用Handler把更新UI的操作切换到主线程中去操作。这里有一个误区就是很多开发者以为Handler只能用于访问UI，这是错误的，因为更新UI这是Handler的一种特殊的使用场景。其实Handler是用于进行">
 
 
 
@@ -330,8 +330,8 @@
       
 
       
-        <a id="more"></a>
-<h4 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h4><p> &emsp;&emsp;Handler在Android开发中经常使用，比我我们在子线程中完成从服务端获取数据，因为Android系统是不允许我们在非主线程中去访问UI，这个时候我们需要用Handler把更新UI的操作切换到主线程中去操作。这里有一个误区就是很多开发者以为Handler只能用于访问UI，这是错误的，因为更新UI这是Handler的一种特殊的使用场景。其实Handler是用于进行Message Runnable的分发，让他们在指定的线程中去执行。</p>
+        <h4 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h4><p> &emsp;&emsp;Handler在Android开发中经常使用，比我我们在子线程中完成从服务端获取数据，因为Android系统是不允许我们在非主线程中去访问UI，这个时候我们需要用Handler把更新UI的操作切换到主线程中去操作。这里有一个误区就是很多开发者以为Handler只能用于访问UI，这是错误的，因为更新UI这是Handler的一种特殊的使用场景。其实Handler是用于进行Message Runnable的分发，让他们在指定的线程中去执行。</p>
+ <a id="more"></a>
 <h4 id="为什么Android系统不允许在非主线程（UI线程）外更新UI"><a href="#为什么Android系统不允许在非主线程（UI线程）外更新UI" class="headerlink" title="为什么Android系统不允许在非主线程（UI线程）外更新UI"></a>为什么Android系统不允许在非主线程（UI线程）外更新UI</h4><p>&emsp;&emsp;在ViewRootImp类中做了UI检查，如果不是UI线程抛出的这个异常我想很多开发人员都遇到过吧。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">void checkThread() &#123;</span><br><span class="line">       if (mThread != Thread.currentThread()) &#123;</span><br><span class="line">           throw new CalledFromWrongThreadException(</span><br><span class="line">                   &quot;Only the original thread that created a view hierarchy can touch its views.&quot;);</span><br><span class="line">       &#125;</span><br><span class="line">   &#125;</span><br></pre></td></tr></table></figure></p>
 <p>&emsp;&emsp;Android的UI控件都不是线程安全的，如果允许其它线程更新UI，那么可能出现多线程并发的操作UI,那么会导致UI控件处于不可预期的状态。有的人会说那为什么系统不对UI控件的访问加上锁机制呢？这样做其实得不偿失，因为加上锁机制会让UI控件的逻辑变得复杂，还有加上锁机制会降低UI控件的访问效率。最简单高效的方式就是只允许一个线程也就是主线程才能访问UI。</p>
 <h4 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h4><p>&emsp;&emsp;Android 的消息机制主要就是指Handler的运行机制，Handler的运行是需要Looper 和MessageQueue的支撑，其中MessageQueue是消息队列，负责存储消息列表，虽然它是一个队列的结构，但是它的底层实现却是单链表。Looper是负责不断的从消息队列中取出消息，发送到消息对象的Handler对象去处理。稍后我将会讲解Looper是怎么实现不断的从消息队列中取出消息的。</p>
