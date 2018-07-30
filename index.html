@@ -334,7 +334,8 @@
       
         
           
-            <h4 id="什么是-ReactiveX？"><a href="#什么是-ReactiveX？" class="headerlink" title="什么是 ReactiveX？"></a>什么是 ReactiveX？</h4><p>&ensp;&ensp;&ensp;ReactiveX 是一个专注于异步编程与控制可观察数据（或者事件）流的API。它组合了观察者模式，迭代器模式和函数式编程的优秀思想。</p>
+            <a id="more"></a>
+<h4 id="什么是-ReactiveX？"><a href="#什么是-ReactiveX？" class="headerlink" title="什么是 ReactiveX？"></a>什么是 ReactiveX？</h4><p>&ensp;&ensp;&ensp;ReactiveX 是一个专注于异步编程与控制可观察数据（或者事件）流的API。它组合了观察者模式，迭代器模式和函数式编程的优秀思想。</p>
 <p>&ensp;&ensp;&ensp;实时数据处理是一件普通的现象，有一个高效、干净和可扩展的方式来处理这些情景是重要的。使用 Observables 和 Operators 来熟练操作它们。ReactiveX 提供一个可组合又灵活的 API 来创建和处理数据流，同时简化了异步编程带来的一些担忧，如：线程创建和并发问题。</p>
 <h4 id="RxJava-简介"><a href="#RxJava-简介" class="headerlink" title="RxJava 简介"></a>RxJava 简介</h4><p>&ensp;&ensp;&ensp;RxJava 是 ReactiveX 在 Java 上的开源的实现。Observable（被观察者） 和 Subscriber（订阅者）是两个主要的类。在 RxJava 上，一个 Observable 是一个发出数据流或者事件的类，Subscriber 是一个对这些发出的 items （数据流或者事件）进行处理（采取行动）的类。一个 Observable 的标准流发出一个或多个 item，然后成功完成或者出错。一个 Observable 可以有多个 Subscribers，并且通过 Observable 发出的每一个 item，该 item 将会被发送到 Subscriber.onNext() 方法来进行处理。一旦 Observable 不再发出 items，它将会调用 Subscriber.onCompleted() 方法，或如果有一个出错的话 Observable 会调用 Subscriber.onError() 方法。</p>
 <p>&ensp;&ensp;&ensp;现在，我们知道了很多关于 Observable 和 Subscriber 类，我们可以继续去介绍有关 Observables 的创建和订阅。</p>
