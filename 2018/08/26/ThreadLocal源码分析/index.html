@@ -87,7 +87,7 @@
 <meta property="og:site_name" content="黄杰的博客">
 <meta property="og:description" content="前言&amp;emsp;&amp;emsp;ThreadLocal从名字上直译为本地线程，看上去像是线程的一种子类，如果你这样理解说明你理解错了。 &amp;emsp;&amp;emsp;在上一篇深入理解Android中的消息机制，理解Hander MessageQueue Looper三者之间的关系中提到了ThreadLocal。今天看到一道美团的面试题如何保证一个线程中只有一个Looper。我第一个想到的就是ThreadLo">
 <meta property="og:locale" content="default">
-<meta property="og:updated_time" content="2018-08-26T15:32:15.010Z">
+<meta property="og:updated_time" content="2018-08-26T15:53:07.905Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="ThreadLocal源码分析">
 <meta name="twitter:description" content="前言&amp;emsp;&amp;emsp;ThreadLocal从名字上直译为本地线程，看上去像是线程的一种子类，如果你这样理解说明你理解错了。 &amp;emsp;&amp;emsp;在上一篇深入理解Android中的消息机制，理解Hander MessageQueue Looper三者之间的关系中提到了ThreadLocal。今天看到一道美团的面试题如何保证一个线程中只有一个Looper。我第一个想到的就是ThreadLo">
@@ -332,6 +332,7 @@
       
         <h4 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h4><p>&emsp;&emsp;ThreadLocal从名字上直译为本地线程，看上去像是线程的一种子类，如果你这样理解说明你理解错了。</p>
 <p>&emsp;&emsp;在上一篇<a href="https://haydenjie.com/2018/07/22/深入理解Andorid消息机制/#more" target="_blank" rel="noopener">深入理解Android中的消息机制，理解Hander MessageQueue Looper三者之间的关系</a>中提到了ThreadLocal。今天看到一道美团的面试题如何保证一个线程中只有一个Looper。我第一个想到的就是ThreadLocal。因为ThreadLocal可以非常简单的实现保证一个线程中只有一个Looper对象。</p>
+<a id="more"></a>
 <h4 id="ThreadLocal工作原理"><a href="#ThreadLocal工作原理" class="headerlink" title="ThreadLocal工作原理"></a>ThreadLocal工作原理</h4><p>&emsp;&emsp; ThreadLocal是一个线程内部的数据存储类，通过它可以在指定的线程中存储数据，并且在只能在存储改数据的线程中才能获取存储的数据。对于其它线程来说是不可见的，是无法获取到该数据的。为什么ThreadLocal就能实现这样的功能呢？简单的来说就是ThreadLocal为变量在每个不同的线程中创建一个副本，不同线程获取的是每个线程内部的副本。所以就能实现不同线程之间不干扰。</p>
 <h4 id="ThreadLocal使用"><a href="#ThreadLocal使用" class="headerlink" title="ThreadLocal使用"></a>ThreadLocal使用</h4><p>&emsp;&emsp;说了这么多，还是直接上代码</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">public static void main(String[] args) &#123;</span><br><span class="line"></span><br><span class="line">     ThreadLocal&lt;Integer&gt; threadLocal = new ThreadLocal&lt;Integer&gt;()&#123;</span><br><span class="line">         @Override</span><br><span class="line">         protected Integer initialValue() &#123;</span><br><span class="line">             return -1;</span><br><span class="line">         &#125;</span><br><span class="line">     &#125;;</span><br><span class="line">     threadLocal.set(100);</span><br><span class="line">     new Thread() &#123;</span><br><span class="line">         @Override</span><br><span class="line">         public void run() &#123;</span><br><span class="line">             super.run();</span><br><span class="line">             threadLocal.set(80);</span><br><span class="line">             System.out.println(Thread.currentThread().getName() + &quot;   :&quot; + threadLocal.get());</span><br><span class="line">         &#125;</span><br><span class="line">     &#125;.start();</span><br><span class="line">     System.out.println(Thread.currentThread().getName() + &quot;   :&quot; + threadLocal.get());</span><br><span class="line"> &#125;</span><br></pre></td></tr></table></figure>
@@ -490,7 +491,7 @@
               
               <div class="site-state-item site-state-tags">
                 
-                  <span class="site-state-item-count">5</span>
+                  <span class="site-state-item-count">4</span>
                   <span class="site-state-item-name">tags</span>
                 
               </div>
