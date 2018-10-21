@@ -1,0 +1,792 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Hexo, NexT" />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="Rxjava 2学习笔记（一） &amp;emsp;&amp;emsp;Rxjava 在这些年在android开发中非常的火爆，它和Retrofit 的结合堪称完美，他们可以把我们从以前我们进行网络请求中各种线程切换，各种接口回掉中解放出来了。可以让我们的逻辑变的非常清晰，便于代码维护。我们公司的项目目前使用的Rxjava 版本还是1.0版本的，准备打算升级到使用Rx2.0。所以打算学习一下Rxjava 2">
+<meta name="keywords" content="android Java Node flutter">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Rxjava 2学习笔记（一）">
+<meta property="og:url" content="http://yoursite.com/2018/10/22/Rxjava-2学习笔记（一）/index.html">
+<meta property="og:site_name" content="黄杰的博客">
+<meta property="og:description" content="Rxjava 2学习笔记（一） &amp;emsp;&amp;emsp;Rxjava 在这些年在android开发中非常的火爆，它和Retrofit 的结合堪称完美，他们可以把我们从以前我们进行网络请求中各种线程切换，各种接口回掉中解放出来了。可以让我们的逻辑变的非常清晰，便于代码维护。我们公司的项目目前使用的Rxjava 版本还是1.0版本的，准备打算升级到使用Rx2.0。所以打算学习一下Rxjava 2">
+<meta property="og:locale" content="default">
+<meta property="og:image" content="http://yoursite.com/2018/10/22/Rxjava-2学习笔记（一）/1.png">
+<meta property="og:updated_time" content="2018-10-21T16:05:41.390Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Rxjava 2学习笔记（一）">
+<meta name="twitter:description" content="Rxjava 2学习笔记（一） &amp;emsp;&amp;emsp;Rxjava 在这些年在android开发中非常的火爆，它和Retrofit 的结合堪称完美，他们可以把我们从以前我们进行网络请求中各种线程切换，各种接口回掉中解放出来了。可以让我们的逻辑变的非常清晰，便于代码维护。我们公司的项目目前使用的Rxjava 版本还是1.0版本的，准备打算升级到使用Rx2.0。所以打算学习一下Rxjava 2">
+<meta name="twitter:image" content="http://yoursite.com/2018/10/22/Rxjava-2学习笔记（一）/1.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: 'Author'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2018/10/22/Rxjava-2学习笔记（一）/"/>
+
+
+
+
+
+  <title>Rxjava 2学习笔记（一） | 黄杰的博客</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="default">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">黄杰的博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            Home
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            About
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            Tags
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            Categories
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            Archives
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/10/22/Rxjava-2学习笔记（一）/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="huangjie">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="黄杰的博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Rxjava 2学习笔记（一）</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-10-22T00:03:23+08:00">
+                2018-10-22
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h3 id="Rxjava-2学习笔记（一）"><a href="#Rxjava-2学习笔记（一）" class="headerlink" title="Rxjava 2学习笔记（一）"></a>Rxjava 2学习笔记（一）</h3><p> &emsp;&emsp;Rxjava 在这些年在android开发中非常的火爆，它和Retrofit 的结合堪称完美，他们可以把我们从以前我们进行网络请求中各种线程切换，各种接口回掉中解放出来了。可以让我们的逻辑变的非常清晰，便于代码维护。我们公司的项目目前使用的Rxjava 版本还是1.0版本的，准备打算升级到使用Rx2.0。所以打算学习一下Rxjava 2</p>
+ <a id="more"></a> 
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line">Observable.create(new ObservableOnSubscribe&lt;String&gt;() &#123;</span><br><span class="line"></span><br><span class="line">            @Override</span><br><span class="line">            public void subscribe(ObservableEmitter&lt;String&gt; emitter) throws Exception &#123;</span><br><span class="line">                emitter.onNext(&quot;hello world&quot;);</span><br><span class="line">                emitter.onComplete();</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;).subscribe(new Observer&lt;String&gt;() &#123;</span><br><span class="line">            @Override</span><br><span class="line">            public void onSubscribe(Disposable d) &#123;</span><br><span class="line">                Log.e(TAG, &quot;onSubscribe&quot;);</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            @Override</span><br><span class="line">            public void onNext(String s) &#123;</span><br><span class="line">                Log.e(TAG, &quot;onNext &quot;+s);</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            @Override</span><br><span class="line">            public void onError(Throwable e) &#123;</span><br><span class="line">                Log.e(TAG, &quot;onError&quot;);</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            @Override</span><br><span class="line">            public void onComplete() &#123;</span><br><span class="line">                Log.e(TAG, &quot;onComplete&quot;);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;);</span><br><span class="line">        </span><br><span class="line">10-13 16:24:39.176 11578-11578/? E/huangjie: onSubscribe</span><br><span class="line">10-13 16:24:39.176 11578-11578/? E/huangjie: onNext hello world</span><br><span class="line">10-13 16:24:39.176 11578-11578/? E/huangjie: onComplete</span><br></pre></td></tr></table></figure>
+<p>上面代码中我们看到了两个陌生的对象，ObservableEmitter和Disposable.</p>
+<h5 id="ObservableEmitter："><a href="#ObservableEmitter：" class="headerlink" title="ObservableEmitter："></a>ObservableEmitter：</h5><p>&emsp;&emsp; Emitter是发射器的意思，那就很好猜了，这个就是用来发出事件的，它可以发出三种类型的事件，通过调用emitter的onNext(T value)、onComplete()和onError(Throwable error)就可以分别发出next事件、complete事件和error事件</p>
+<h5 id="Disposable："><a href="#Disposable：" class="headerlink" title="Disposable："></a>Disposable：</h5><p> &emsp;&emsp;这个单词的字面意思是一次性用品,用完即可丢弃的. 那么在RxJava中怎么去理解它呢, 对应于上面的水管的例子, 我们可以把它理解成两根管道之间的一个机关, 当调用它的dispose()方法时, 它就会将两根管道切断, 从而导致下游收不到事件.</p>
+<h5 id="在Rxjava-2-中，Observable不再支持订阅Subscriber了，而是需要使用Observer作为观察者。但是有一点是没有变化的，不管是在Rxjava-1-还是在Rxjava-2中，被观察者，观察者，订阅-三者缺一不可。只有在使用了subscribe-方法过后（就是被观察者订阅观察者），被观察者才会发送数据。"><a href="#在Rxjava-2-中，Observable不再支持订阅Subscriber了，而是需要使用Observer作为观察者。但是有一点是没有变化的，不管是在Rxjava-1-还是在Rxjava-2中，被观察者，观察者，订阅-三者缺一不可。只有在使用了subscribe-方法过后（就是被观察者订阅观察者），被观察者才会发送数据。" class="headerlink" title="在Rxjava 2    中，Observable不再支持订阅Subscriber了，而是需要使用Observer作为观察者。但是有一点是没有变化的，不管是在Rxjava 1 还是在Rxjava 2中，被观察者，观察者，订阅 三者缺一不可。只有在使用了subscribe()方法过后（就是被观察者订阅观察者），被观察者才会发送数据。"></a>在Rxjava 2    中，Observable不再支持订阅Subscriber了，而是需要使用Observer作为观察者。但是有一点是没有变化的，不管是在Rxjava 1 还是在Rxjava 2中，被观察者，观察者，订阅 三者缺一不可。只有在使用了subscribe()方法过后（就是被观察者订阅观察者），被观察者才会发送数据。</h5><p> 在Rxjava 2中有五种观察者模式<br>     <img src="/2018/10/22/Rxjava-2学习笔记（一）/1.png" alt=""></p>
+<table>
+<thead>
+<tr>
+<th>类型</th>
+<th style="text-align:center">描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Observale</td>
+<td style="text-align:center">能够发射0或者n 个数据，并以成功或者错误事件终止</td>
+<td style="text-align:right"></td>
+</tr>
+<tr>
+<td>Flowable</td>
+<td style="text-align:center">能够发射0或n个数据，并以成功或者错误事件终止，支持背压，可以控制数据源发射的速度</td>
+<td style="text-align:right"></td>
+</tr>
+<tr>
+<td>Single</td>
+<td style="text-align:center">只能发射单个数据或错误事件</td>
+<td style="text-align:right"></td>
+</tr>
+<tr>
+<td>Completable</td>
+<td style="text-align:center">从来不发射数据，只处理onComplete 和onError事件，可以看成Rxjava的Runnable</td>
+<td style="text-align:right"></td>
+</tr>
+<tr>
+<td>Maybe</td>
+<td style="text-align:center">能够发射0或者n个数据，要么成功，要么失败。有点类似于Optional</td>
+<td style="text-align:right"></td>
+</tr>
+</tbody>
+</table>
+<h4 id="do操作符"><a href="#do操作符" class="headerlink" title="do操作符"></a>do操作符</h4><p>&emsp;&emsp;do操作符可以给Observable的生命周期的各个阶段加上一系列的监听，当Observable执行到各个阶段的时，这些回掉就会触发。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br></pre></td><td class="code"><pre><span class="line">Observable.just(&quot;hello&quot;)</span><br><span class="line">                .doOnNext(new Consumer&lt;String&gt;() &#123;</span><br><span class="line">                    @Override</span><br><span class="line">                    public void accept(String s) throws Exception &#123;</span><br><span class="line">                        Log.e(TAG, &quot;doOnNext&quot; + s);</span><br><span class="line">                    &#125;</span><br><span class="line">                &#125;)</span><br><span class="line">                .doAfterNext(new Consumer&lt;String&gt;() &#123;</span><br><span class="line">                    @Override</span><br><span class="line">                    public void accept(String s) throws Exception &#123;</span><br><span class="line">                        Log.e(TAG, &quot;doAfterNext&quot; + s);</span><br><span class="line">                    &#125;</span><br><span class="line">                &#125;)</span><br><span class="line">                .doOnComplete(new Action() &#123;</span><br><span class="line">                    @Override</span><br><span class="line">                    public void run() throws Exception &#123;</span><br><span class="line">                        Log.e(TAG, &quot;doOnComplete&quot;);</span><br><span class="line">                    &#125;</span><br><span class="line">                &#125;)</span><br><span class="line">                .doOnSubscribe(new Consumer&lt;Disposable&gt;() &#123;</span><br><span class="line">                    @Override</span><br><span class="line">                    public void accept(Disposable disposable) throws Exception &#123;</span><br><span class="line">                        Log.e(TAG, &quot;doOnSubscribe&quot;);</span><br><span class="line">                    &#125;</span><br><span class="line">                &#125;)</span><br><span class="line">                .doAfterTerminate(new Action() &#123;</span><br><span class="line">                    @Override</span><br><span class="line">                    public void run() throws Exception &#123;</span><br><span class="line">                        Log.e(TAG, &quot;doAfterTerminate&quot;);</span><br><span class="line">                    &#125;</span><br><span class="line">                &#125;)</span><br><span class="line">                .doFinally(new Action() &#123;</span><br><span class="line">                    @Override</span><br><span class="line">                    public void run() throws Exception &#123;</span><br><span class="line">                        Log.e(TAG, &quot;doFinally&quot;);</span><br><span class="line"></span><br><span class="line">                    &#125;</span><br><span class="line">                &#125;)</span><br><span class="line">                .doOnEach(new Consumer&lt;Notification&lt;String&gt;&gt;() &#123;</span><br><span class="line">                    @Override</span><br><span class="line">                    public void accept(Notification&lt;String&gt; stringNotification) throws Exception &#123;</span><br><span class="line">                        Log.e(TAG, &quot;doOnEach&quot; + (stringNotification.isOnNext() ? &quot;onNext&quot; : stringNotification.isOnComplete() ? &quot;onComplete&quot; : &quot;onError&quot;));</span><br><span class="line"></span><br><span class="line">                    &#125;</span><br><span class="line">                &#125;)</span><br><span class="line">                .doOnLifecycle(new Consumer&lt;Disposable&gt;() &#123;</span><br><span class="line">                    @Override</span><br><span class="line">                    public void accept(Disposable disposable) throws Exception &#123;</span><br><span class="line">                        Log.e(TAG, &quot;doOnLifecycle&quot;);</span><br><span class="line">                    &#125;</span><br><span class="line">                &#125;, new Action() &#123;</span><br><span class="line">                    @Override</span><br><span class="line">                    public void run() throws Exception &#123;</span><br><span class="line">                        Log.e(TAG, &quot;doOnLifecycle run&quot;);</span><br><span class="line">                    &#125;</span><br><span class="line">                &#125;)</span><br><span class="line">                .subscribe(new Observer&lt;String&gt;() &#123;</span><br><span class="line">                    @Override</span><br><span class="line">                    public void onSubscribe(Disposable d) &#123;</span><br><span class="line"></span><br><span class="line">                    &#125;</span><br><span class="line"></span><br><span class="line">                    @Override</span><br><span class="line">                    public void onNext(String s) &#123;</span><br><span class="line">                        Log.e(TAG, &quot; onNext&quot; + s);</span><br><span class="line"></span><br><span class="line">                    &#125;</span><br><span class="line"></span><br><span class="line">                    @Override</span><br><span class="line">                    public void onError(Throwable e) &#123;</span><br><span class="line">                        Log.e(TAG, &quot; onError&quot;);</span><br><span class="line">                    &#125;</span><br><span class="line"></span><br><span class="line">                    @Override</span><br><span class="line">                    public void onComplete() &#123;</span><br><span class="line"></span><br><span class="line">                    &#125;</span><br><span class="line">                &#125;);</span><br><span class="line">        </span><br><span class="line">  E/huangjie: doOnSubscribe</span><br><span class="line"> E/huangjie: doOnLifecycle</span><br><span class="line"> E/huangjie: doOnNext   hello</span><br><span class="line"> E/huangjie: doOnEach  onNext</span><br><span class="line"> E/huangjie:  onNext  hello</span><br><span class="line"> E/huangjie: doAfterNext  hello</span><br><span class="line"> E/huangjie: doOnComplete</span><br><span class="line"> E/huangjie: doOnEach  onComplete</span><br><span class="line"> E/huangjie: doFinally</span><br><span class="line"> E/huangjie: doAfterTerminate</span><br></pre></td></tr></table></figure>
+<p>根据打印的日志我们看出Rxjava 内部数据的流向</p>
+<table>
+<thead>
+<tr>
+<th>操作符</th>
+<th style="text-align:center">用途</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>doOnSubscribe</td>
+<td style="text-align:center">一旦观察者订阅了Observable,它就会调用</td>
+<td style="text-align:right"></td>
+</tr>
+<tr>
+<td>doOnLifecycle</td>
+<td style="text-align:center">可以在观察者订阅之后，设置是否取消订阅</td>
+<td style="text-align:right"></td>
+</tr>
+<tr>
+<td>doOnNext</td>
+<td style="text-align:center">它产生的Observable 每发射一项就会调用它一次，它的Consumer接受发射的数据项，一般用于在subscrible之前的数据进行处理</td>
+<td style="text-align:right"></td>
+</tr>
+<tr>
+<td>doOnEach</td>
+<td style="text-align:center">它产生的Observable每发射一项数据就会调用它一次，不仅包括onNext,还包括onError和onCompleted</td>
+<td style="text-align:right"></td>
+</tr>
+<tr>
+<td>doAfterNext</td>
+<td style="text-align:center">在onNext之后执行，而doOnNext()是在onNext之前执行</td>
+<td style="text-align:right"></td>
+</tr>
+<tr>
+<td>doOnComplete</td>
+<td style="text-align:center">当它产生的Observable在正常终止调用onComplete时会被调用</td>
+<td style="text-align:right"></td>
+</tr>
+<tr>
+<td>doFinally</td>
+<td style="text-align:center">在当它产生的Observable终止之后会被调用，无论是正常终止，还是异常终止，doFinally 优于doAfterTerminate的调用</td>
+<td style="text-align:right"></td>
+</tr>
+<tr>
+<td>doAfterTerminate</td>
+<td style="text-align:center">注册一个Action,当Observable调用onComplete或onError时触发</td>
+<td style="text-align:right"></td>
+</tr>
+</tbody>
+</table>
+<p>上面的代码中我们发现了Consumer 和Action,我可以认为其实Consumer 就是Rxjava 1.x 的Action1, Consumer是单一参数，Action是无参数类型。</p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/08/26/ThreadLocal源码分析/" rel="next" title="ThreadLocal源码分析">
+                <i class="fa fa-chevron-left"></i> ThreadLocal源码分析
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">huangjie</p>
+              <p class="site-description motion-element" itemprop="description">stay hungry stay foolish</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">7</span>
+                  <span class="site-state-item-name">posts</span>
+                </a>
+              </div>
+            
+
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                
+                  <span class="site-state-item-count">4</span>
+                  <span class="site-state-item-name">tags</span>
+                
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#Rxjava-2学习笔记（一）"><span class="nav-number">1.</span> <span class="nav-text">Rxjava 2学习笔记（一）</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#ObservableEmitter："><span class="nav-number">1.0.1.</span> <span class="nav-text">ObservableEmitter：</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#Disposable："><span class="nav-number">1.0.2.</span> <span class="nav-text">Disposable：</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#在Rxjava-2-中，Observable不再支持订阅Subscriber了，而是需要使用Observer作为观察者。但是有一点是没有变化的，不管是在Rxjava-1-还是在Rxjava-2中，被观察者，观察者，订阅-三者缺一不可。只有在使用了subscribe-方法过后（就是被观察者订阅观察者），被观察者才会发送数据。"><span class="nav-number">1.0.3.</span> <span class="nav-text">在Rxjava 2    中，Observable不再支持订阅Subscriber了，而是需要使用Observer作为观察者。但是有一点是没有变化的，不管是在Rxjava 1 还是在Rxjava 2中，被观察者，观察者，订阅 三者缺一不可。只有在使用了subscribe()方法过后（就是被观察者订阅观察者），被观察者才会发送数据。</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#do操作符"><span class="nav-number">1.1.</span> <span class="nav-text">do操作符</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">huangjie</span>
+
+  
+</div>
+
+
+  <div class="powered-by">Powered by <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a></div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">Theme &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Muse</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
