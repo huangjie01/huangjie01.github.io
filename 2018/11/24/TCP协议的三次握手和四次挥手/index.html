@@ -92,7 +92,7 @@
 <meta property="og:image" content="http://yoursite.com/2018/11/24/TCP协议的三次握手和四次挥手/3.png">
 <meta property="og:image" content="http://yoursite.com/2018/11/24/TCP协议的三次握手和四次挥手/4.png">
 <meta property="og:image" content="http://yoursite.com/2018/11/24/TCP协议的三次握手和四次挥手/5.png">
-<meta property="og:updated_time" content="2018-11-24T15:27:37.887Z">
+<meta property="og:updated_time" content="2018-11-24T15:34:55.029Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="TCP协议的三次握手和四次挥手">
 <meta name="twitter:description" content="&amp;emsp;&amp;emsp;TCP(传输控制协议)是一种面向连接，确保数据在端到端之间可靠传输的协议，面向连接指的是在发送数据前，需要先建立一条虚拟的链路，然后让数据在这条链路上传输，为了确保数据的可靠传输，不仅需要对发出的每个字节进行编号确认，检验每一个数据包的有效性，在出现超时情况时进行重传，还需要通过实现滑动窗口和拥塞控制机制，避免网络情况恶化而最终影响数据传输的极端情形，每个TCP数据包都是封">
@@ -336,7 +336,7 @@
       
 
       
-        <p>&emsp;&emsp;TCP(传输控制协议)是一种面向连接，确保数据在端到端之间可靠传输的协议，面向连接指的是在发送数据前，需要先建立一条虚拟的链路，然后让数据在这条链路上传输，为了确保数据的可靠传输，不仅需要对发出的每个字节进行编号确认，检验每一个数据包的有效性，在出现超时情况时进行重传，还需要通过实现滑动窗口和拥塞控制机制，避免网络情况恶化而最终影响数据传输的极端情形，每个TCP数据包都是封装在IP包中。每一个IP头的后面紧接着是TCP头，TCP报文格式如下：</p>
+        <p>&emsp;&emsp;TCP(传输控制协议)是一种面向连接，确保数据在端到端之间可靠传输的协议，面向连接指的是在发送数据前，需要先建立一条虚拟的链路，然后让数据在这条链路上传输，为了确保数据的可靠传输，不仅需要对发出的每个字节进行编号确认，检验每一个数据包的有效性，在出现超时情况时进行重传，还需要通过实现滑动窗口和拥塞控制机制，避免网络情况恶化而最终影响数据传输的极端情形，每个TCP数据包都是封装在IP包中。每一个IP头的后面紧接着是TCP头，TCP报文格式如下：<br><a id="more"></a> </p>
 <p><img src="/2018/11/24/TCP协议的三次握手和四次挥手/1.png" alt=""></p>
 <h4 id="三次握手"><a href="#三次握手" class="headerlink" title="三次握手"></a>三次握手</h4><p> &emsp;&emsp;协议第一行的两个端口号各占两个字节，分别表示了源机器的端口号和目标机器的端口号。这个两个端口号和IP报头中的源IP地址和目标IP地址所组成的四元组可唯一标示一条TCP连接，由于TCP是面向连接的，因此有服务端和客户端之分。需要服务端先在相应的端口进行监听，准备好接受客户端发起的建立连接请求。当客户端发起第一个请求建立连接的TCP报时，目标机器端口就是服务端所监听的端口号，比如代表HTTP服务的80端口，代表SSH服务的22端口，代表HTTPS服务的443端口。<br>&emsp;&emsp;TCP的FLAG位由6个bit组成，分别代表ACK,SYN,FIN,URG,PSH,RST,都以置1表示有效，我们重点关注SYN,ACK和FIN。SYN(Synchronize Sequence Numbers)用作建立连接时的同步信号，ACK(Acknowledgement)用于对收到的数据进行确认，所确认的数据由确认序列号表示，FIN(finish)表示后面没有数据需要发送，通常意味着所建立的连接需要关闭了。<br><img src="/2018/11/24/TCP协议的三次握手和四次挥手/2.png" alt=""></p>
 <ul>
