@@ -88,7 +88,7 @@
 <meta property="og:description" content="Java内存模型&amp;emsp;&amp;emsp;java中的堆内存是用来存储实例化的对象，它在虚拟机启动的时候创建，在Java虚拟机规范中规定堆内存是所有对象实例以及数组都在堆内存中进行分配内存。堆内存是被所有的线程共享的内存区域，因此存在内存可见性的问题，但是局部变量，方法定义的参数则不会在线程之间共享，他们不存在内存可见性的问题，也不受Java内存模型的影响。Java内存模型定义了线程和主存之间的抽象">
 <meta property="og:locale" content="default">
 <meta property="og:image" content="http://yoursite.com/2018/08/06/多线程开发之volatile/volatile.png">
-<meta property="og:updated_time" content="2018-08-06T03:57:21.656Z">
+<meta property="og:updated_time" content="2019-01-26T05:18:12.092Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="多线程开发之volatile">
 <meta name="twitter:description" content="Java内存模型&amp;emsp;&amp;emsp;java中的堆内存是用来存储实例化的对象，它在虚拟机启动的时候创建，在Java虚拟机规范中规定堆内存是所有对象实例以及数组都在堆内存中进行分配内存。堆内存是被所有的线程共享的内存区域，因此存在内存可见性的问题，但是局部变量，方法定义的参数则不会在线程之间共享，他们不存在内存可见性的问题，也不受Java内存模型的影响。Java内存模型定义了线程和主存之间的抽象">
@@ -353,6 +353,8 @@
 <p>&emsp;&emsp;我们这样写的单例模式其实是有问题的，并不能真正的实现单例模式，假如线程A首先进入getInstance()方法，发现instance 对象为空，那么首先获取锁，这个时候如果线程B也执行getInstance()方法，发现instance对象仍然为空，那么线程B将会尝试获取锁对象，发现锁被线程A持有，这个时候线程B进入阻塞状态。在线程A完成了初始化的时候，释放锁对象，这个时候线程B将会获取锁对象，前面我说过了Java中的内存模型，线程A初始化的instance对象首先是在线程A的本地内存中，这个时候如果线程B在进行第二次判断instance对象是否为空的时候发现线程B和主内存中的instance对象为空，那么线程B也会进行初始化操作。所以这样的double check 模式并不能保证单例模式。正确的写法因该是下面这种写法</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">public class Instance &#123;</span><br><span class="line">    public static volatile Instance instance;</span><br><span class="line">    private Instance() &#123;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    public static Instance getInstance() &#123;</span><br><span class="line">        if (instance == null) &#123;</span><br><span class="line">            synchronized (Instance.class) &#123;</span><br><span class="line">                if (instance == null) &#123;</span><br><span class="line">                    instance = new Instance();</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        return instance;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>&emsp;&emsp;通过给instance 变量 加上volatile声明过后，一旦线程A初始化成功Instance类的对象过后，会马上把对象从线程A本地内存中刷入主内存中，并且对线程B可见，这样就避免了线程B又初始化一次对象。</p>
+<p>&emsp;&emsp; 锁也可以保证变量的可见性，但是实现方式是和volatile的实现方式不一样的，锁是获取锁的时候读取缓存的副本，释放锁的时候写入内存中。 volatile解决的是多线程共享变量的可见性问题，类似于Synchronized,但是不具备互斥性，所以对volatile修饰的变量的操作并非是原子性的。</p>
+<p>&emsp;&emsp;“volatile 是轻量级的同步方式 ” 这种说法是错误的。它只是轻量级的线程 操作可见方式 ， 并非同步方式 ， 如果是多写场景 ， 定会产生线程安全问题。如果是一写多读的并发场景 ， 使用 volatile 修饰变量则非常合适。 volatile 一写多读最典型的应用是CopyOnWriteArrayList。它在修改数据时会把整个集合的数据全部复制出来 ， 对写操作加锁，修改完成后， 再用 setArray()把 array指向新的集合。使用 volatile可 以便读线程尽快地感知 array 的修改 ， 不进行指令重排，操作后即对其他线程可见。</p>
 
       
     </div>
@@ -466,7 +468,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">9</span>
+                  <span class="site-state-item-count">10</span>
                   <span class="site-state-item-name">posts</span>
                 </a>
               </div>
